@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Автомойка на Уральской</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Layout: single column on phone, hero + booking side by side on desktop; water-blue with sunny yellow CTA */
+  --bg:#EEF3F6;
+  --surface:#FFFFFF;
+  --ink:#10202C;
+  --muted:#5A6B78;
+  --water:#0A5A9C;
+  --sun:#FFC21A;
+  --line:#D6E0E7;
+  --ok:#1E8A4C;
+  --display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --body:"Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+a{color:var(--water)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:clamp(22px,4vw,30px)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.demo{background:var(--ink);color:#fff;font-size:13px;text-align:center;padding:7px 12px}
+.demo b{color:var(--sun)}
+header{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:17px}
+.logo svg{flex:none}
+.navlinks{display:flex;gap:18px;font-weight:600;font-size:15px}
+.navlinks a{color:var(--ink);text-decoration:none}
+.navlinks a:hover{color:var(--water)}
+.phone{font-weight:700;white-space:nowrap;text-decoration:none;color:var(--ink)}
+@media (max-width:720px){.navlinks{display:none}}
+
+.hero{background:linear-gradient(160deg,var(--water) 0%,#073F6E 100%);color:#fff;padding:40px 0 48px}
+.hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;align-items:start}
+@media (max-width:860px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(30px,6vw,52px)}
+.hero p.lead{font-size:18px;opacity:.92;max-width:34ch;margin:14px 0 22px}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:6px 14px;font-size:14px;font-weight:600}
+.chip.star{background:var(--sun);color:var(--ink);border-color:var(--sun)}
+.btns{display:flex;flex-wrap:wrap;gap:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:14px 22px;font:700 16px var(--body);cursor:pointer;text-decoration:none}
+.btn-sun{background:var(--sun);color:var(--ink)}
+.btn-sun:hover{filter:brightness(1.05)}
+.btn-ghost{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.6)}
+.btn:focus-visible,input:focus-visible,select:focus-visible,button:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+.card{background:var(--surface);color:var(--ink);border-radius:18px;padding:22px;box-shadow:0 12px 40px rgba(8,40,70,.18)}
+.card h3{font-size:20px;margin-bottom:4px}
+.card .sub{color:var(--muted);font-size:14px;margin:0 0 16px}
+form{display:grid;gap:14px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:420px){.row2{grid-template-columns:1fr}}
+label{display:grid;gap:6px;font-weight:600;font-size:14px}
+input,select{font:500 16px var(--body);padding:12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);width:100%}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px}
+.slot{border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:9px 0;font:600 15px var(--body);cursor:pointer;color:var(--ink);font-variant-numeric:tabular-nums}
+.slot[aria-pressed="true"]{background:var(--water);border-color:var(--water);color:#fff}
+.slot:disabled{opacity:.35;cursor:not-allowed;text-decoration:line-through}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1px dashed var(--line);padding-top:12px;font-weight:600}
+.total b{font-family:var(--display);font-size:22px;font-variant-numeric:tabular-nums}
+.err{color:#B3261E;font-size:14px;min-height:1em;margin:0}
+.done{text-align:center;padding:10px 0}
+.done .tick{width:56px;height:56px;border-radius:50%;background:var(--ok);display:grid;place-items:center;margin:0 auto 12px}
+.done p{margin:6px 0}
+.tg{background:#EAF3FB;border-radius:12px;padding:12px;font-size:14px;text-align:left;margin-top:14px}
+
+section{padding:52px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:end;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.note{color:var(--muted);font-size:14px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.tab{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px;font:600 15px var(--body);cursor:pointer;color:var(--ink)}
+.tab[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.prices{background:var(--surface);border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+.prow{display:grid;grid-template-columns:1fr auto;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);align-items:center}
+.prow:last-child{border-bottom:0}
+.prow .name{font-weight:700}
+.prow .desc{color:var(--muted);font-size:14px}
+.prow .price{font-family:var(--display);font-size:18px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.classes{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
+@media (max-width:720px){.classes{grid-template-columns:repeat(2,1fr)}}
+.cls{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;font-size:14px}
+.cls b{display:block;font-size:15px}
+
+.feat{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:860px){.feat{grid-template-columns:repeat(2,1fr)}}
+.f{background:var(--surface);border-radius:14px;padding:18px;border:1px solid var(--line)}
+.f svg{margin-bottom:10px}
+.f b{display:block;margin-bottom:4px}
+.f span{color:var(--muted);font-size:14px}
+
+.reviews{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media (max-width:860px){.reviews{grid-template-columns:1fr}}
+.rev{background:var(--surface);border-radius:14px;padding:18px;border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.rev .who{font-weight:700}
+.rev .when{color:var(--muted);font-size:13px}
+.rating-big{display:flex;align-items:center;gap:12px}
+.rating-big b{font-family:var(--display);font-size:34px}
+
+.contacts{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:760px){.contacts{grid-template-columns:1fr}}
+.ct{background:var(--surface);border-radius:16px;padding:22px;border:1px solid var(--line);display:grid;gap:14px}
+.ct dt{color:var(--muted);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.ct dd{margin:2px 0 0;font-weight:700;font-size:18px}
+.hours{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.hours td{padding:7px 0;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right;font-weight:600}
+.hours tr.today td{color:var(--water);font-weight:700}
+.map{background:repeating-linear-gradient(45deg,#E3EBF1 0 12px,#EDF2F6 12px 24px);border-radius:12px;min-height:150px;display:grid;place-items:center;text-align:center;padding:16px}
+footer{background:var(--ink);color:#C9D5DE;padding:28px 0;font-size:14px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}
+.fab{position:fixed;right:16px;bottom:16px;z-index:6;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+@media (min-width:861px){.fab{display:none}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+</head>
+<body>
+
+<div class="demo"><b>Демо-версия сайта.</b> Цены примерные, заявки пока никуда не отправляются.</div>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo">
+      <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect width="34" height="34" rx="9" fill="#0A5A9C"/><path d="M17 6c-4 6-7 9.5-7 13a7 7 0 0 0 14 0c0-3.5-3-7-7-13z" fill="#FFC21A"/><circle cx="14.5" cy="19.5" r="2" fill="#fff" opacity=".8"/></svg>
+      Автомойка
+    </div>
+    <nav class="navlinks" aria-label="Разделы">
+      <a href="#prices">Цены</a><a href="#about">Услуги</a><a href="#reviews">Отзывы</a><a href="#contacts">Контакты</a>
+    </nav>
+    <a class="phone" href="tel:+79126763072">+7 912 676-30-72</a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1>Автомойка в Михайловске</h1>
+      <p class="lead">Мойка кузова, комплекс и химчистка салона на Уральской, 16/2. Запишитесь на удобное время и приезжайте без очереди.</p>
+      <div class="facts">
+        <span class="chip star">★ 4,0 · 30 оценок</span>
+        <span class="chip">Ежедневно 10:00–19:00</span>
+        <span class="chip">Кузов от 200 ₽</span>
+      </div>
+      <div class="btns">
+        <a class="btn btn-sun" href="#book">Записаться онлайн</a>
+        <a class="btn btn-ghost" href="#prices">Смотреть цены</a>
+      </div>
+    </div>
+
+    <div class="card" id="book">
+      <div id="formView">
+        <h3>Онлайн-запись</h3>
+        <p class="sub">Выберите услугу и время, мы перезвоним для подтверждения</p>
+        <form id="bookForm" novalidate>
+          <div class="row2">
+            <label for="svc">Услуга
+              <select id="svc"></select>
+            </label>
+            <label for="cls">Класс авто
+              <select id="cls"></select>
+            </label>
+          </div>
+          <label for="day">Дата
+            <select id="day"></select>
+          </label>
+          <div>
+            <div style="font-weight:600;font-size:14px;margin-bottom:6px">Время</div>
+            <div class="slots" id="slots" role="group" aria-label="Свободное время"></div>
+          </div>
+          <div class="row2">
+            <label for="name">Имя
+              <input id="name" autocomplete="name" placeholder="Как к вам обращаться">
+            </label>
+            <label for="tel">Телефон
+              <input id="tel" type="tel" autocomplete="tel" placeholder="+7 ___ ___-__-__">
+            </label>
+          </div>
+          <div class="total"><span>Примерная стоимость</span><b id="sum">—</b></div>
+          <p class="err" id="err" role="alert"></p>
+          <button class="btn btn-sun" type="submit">Записаться</button>
+        </form>
+      </div>
+      <div id="doneView" class="done" hidden>
+        <div class="tick"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Вы записаны</h3>
+        <p id="doneText"></p>
+        <div class="tg"><b>Так это увидит владелец.</b> В рабочей версии заявка сразу приходит в Telegram:<br><span id="tgText"></span></div>
+        <p style="margin-top:14px"><button class="btn btn-sun" id="again" type="button">Новая запись</button></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section id="prices">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Цены</h2>
+      <span class="note">Примерные, уточняются у мойки</span>
+    </div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="prices" id="priceList"></div>
+    <div class="classes">
+      <div class="cls"><b>1 класс</b>Малолитражки: Гранта, Solaris, Polo</div>
+      <div class="cls"><b>2 класс</b>Седаны и хэтчбеки: Веста, Camry, Octavia</div>
+      <div class="cls"><b>3 класс</b>Кроссоверы: Нива, Creta, RAV4, Haval</div>
+      <div class="cls"><b>4 класс</b>Внедорожники, минивэны, пикапы</div>
+    </div>
+  </div>
+</section>
+
+<section id="about" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><h2>Что у нас есть</h2></div>
+    <div class="feat">
+      <div class="f"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3" fill="none" stroke="#0A5A9C" stroke-width="2"/><path d="M3 9h18M8 2v4M16 2v4" stroke="#0A5A9C" stroke-width="2"/></svg><b>Запись заранее</b><span>Приезжаете к своему времени, без очереди</span></div>
+      <div class="f"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c-3.5 5-6 8-6 11a6 6 0 0 0 12 0c0-3-2.5-6-6-11z" fill="none" stroke="#0A5A9C" stroke-width="2"/></svg><b>Самообслуживание</b><span>Можно помыть машину самому</span></div>
+      <div class="f"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11h14v3a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5v-3zM18 12h1.5a2 2 0 0 1 0 4H17" fill="none" stroke="#0A5A9C" stroke-width="2"/><path d="M8 4v4M12 4v4" stroke="#0A5A9C" stroke-width="2"/></svg><b>Кафе</b><span>Посидеть, пока моют машину</span></div>
+      <div class="f"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2" fill="none" stroke="#0A5A9C" stroke-width="2"/><path d="M12 7v13M3 12h18M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0" fill="none" stroke="#0A5A9C" stroke-width="2"/></svg><b>Подарочные сертификаты</b><span>Хороший подарок автолюбителю</span></div>
+      <div class="f"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V8l8-5 8 5v12" fill="none" stroke="#0A5A9C" stroke-width="2"/><path d="M9 20v-6h6v6" fill="none" stroke="#0A5A9C" stroke-width="2"/></svg><b>Парковка</b><span>Есть где оставить машину</span></div>
+      <div class="f"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 18l2-6 4 2 4-2 2 6M8 8a2 2 0 1 0 0-.1M16 8a2 2 0 1 0 0-.1" fill="none" stroke="#0A5A9C" stroke-width="2"/></svg><b>Можно с собакой</b><span>Питомцы не помеха</span></div>
+      <div class="f"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12l-8 8-9-9V4h7z" fill="none" stroke="#0A5A9C" stroke-width="2"/><circle cx="7.5" cy="7.5" r="1.5" fill="#0A5A9C"/></svg><b>Скидки</b><span>Акции для постоянных клиентов</span></div>
+      <div class="f"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 15l2-6h14l2 6v4H3z M7 19v2M17 19v2" fill="none" stroke="#0A5A9C" stroke-width="2"/></svg><b>Предпродажная подготовка</b><span>Машина будет как с витрины</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Отзывы</h2>
+      <div class="rating-big"><b>4,0</b><span class="note">30 оценок<br>на Яндекс Картах</span></div>
+    </div>
+    <div class="reviews">
+      <div class="rev"><div><div class="who">Ксения М.</div><div class="when">1 мая · Яндекс Карты</div></div><div>Заехала раз, вымыли чисто, быстро. Всегда можно дозвониться и договориться о мойке авто. Осталась довольна. Буду приезжать еще.</div></div>
+      <div class="rev"><div><div class="who">Максим П.</div><div class="when">15 января · Яндекс Карты</div></div><div>Отличная автомойка, помыли быстро и качественно! А главное не дорого.</div></div>
+      <div class="rev"><div><div class="who">Илья А.</div><div class="when">6 мая · Яндекс Карты</div></div><div>Отличная автомойка, рекомендую!</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contacts" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><h2>Как нас найти</h2></div>
+    <div class="contacts">
+      <dl class="ct">
+        <div><dt>Адрес</dt><dd>Михайловск, Уральская ул., 16/2</dd></div>
+        <div><dt>Телефон</dt><dd><a href="tel:+79126763072" style="color:inherit">+7 912 676-30-72</a></dd></div>
+        <div class="map"><div><b>Здесь будет карта</b><br><a href="https://yandex.ru/maps/org/avtomoyka/242472418590/">Открыть в Яндекс Картах</a></div></div>
+      </dl>
+      <div class="ct">
+        <dt>Время работы</dt>
+        <table class="hours" id="hours"></table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>Автомойка · Михайловск, Уральская ул., 16/2</span>
+    <span>Демо-версия сайта</span>
+  </div>
+</footer>
+
+<a class="btn btn-sun fab" href="#book">Записаться</a>
+
+<script>
+// Примерные цены по классам 1–4 (уточняются)
+const SERVICES = [
+  {id:"body", name:"Мойка кузова", desc:"Бесконтактная мойка, сушка", p:[200,300,400,500], min:20},
+  {id:"complex", name:"Комплексная мойка", desc:"Кузов, салон пылесосом, стёкла, коврики", p:[600,750,900,1100], min:45},
+  {id:"wax", name:"Кузов + воск", desc:"Мойка кузова и защитное покрытие", p:[400,500,650,800], min:30},
+  {id:"engine", name:"Мойка двигателя", desc:"Аккуратная мойка подкапотного пространства", p:[700,700,900,1000], min:30},
+  {id:"dry", name:"Химчистка салона", desc:"Сиденья, потолок, ковры, пластик", p:[5000,6000,7000,8000], min:240, from:true},
+  {id:"presale", name:"Предпродажная подготовка", desc:"Комплекс, полировка фар, чернение шин", p:[2000,2500,3000,3500], min:120, from:true}
+];
+const CLASSES = ["1 класс","2 класс","3 класс","4 класс"];
+const fmt = n => n.toLocaleString("ru-RU") + " ₽";
+const $ = id => document.getElementById(id);
+
+// Вкладки с ценами
+let curCls = 0;
+function renderPrices(){
+  $("tabs").innerHTML = CLASSES.map((c,i)=>`<button class="tab" role="tab" aria-selected="${i===curCls}" data-i="${i}">${c}</button>`).join("");
+  $("priceList").innerHTML = SERVICES.map(s=>`<div class="prow"><div><div class="name">${s.name}</div><div class="desc">${s.desc}</div></div><div class="price">${s.from?"от ":""}${fmt(s.p[curCls])}</div></div>`).join("");
+}
+$("tabs").addEventListener("click", e=>{const b=e.target.closest(".tab"); if(!b) return; curCls=+b.dataset.i; renderPrices();});
+renderPrices();
+
+// Форма записи
+$("svc").innerHTML = SERVICES.map(s=>`<option value="${s.id}">${s.name}</option>`).join("");
+$("cls").innerHTML = CLASSES.map((c,i)=>`<option value="${i}">${c}</option>`).join("");
+const DAYS = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
+const MONTHS = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+const now = new Date();
+const dayOpts = [];
+for(let i=0;i<7;i++){
+  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate()+i);
+  const label = (i===0?"Сегодня, ":i===1?"Завтра, ":DAYS[d.getDay()]+", ") + d.getDate()+" "+MONTHS[d.getMonth()];
+  dayOpts.push({d, label});
+}
+$("day").innerHTML = dayOpts.map((o,i)=>`<option value="${i}">${o.label}</option>`).join("");
+
+let slot = null;
+function seeded(n){ const x = Math.sin(n)*10000; return x - Math.floor(x); }
+function renderSlots(){
+  const di = +$("day").value, d = dayOpts[di].d;
+  const html = [];
+  for(let h=10; h<19; h++){
+    for(const m of [0,30]){
+      if(h===18 && m===30) continue;
+      const t = `${String(h).padStart(2,"0")}:${m?"30":"00"}`;
+      const past = di===0 && (h*60+m) <= now.getHours()*60+now.getMinutes()+30;
+      const busy = seeded(d.getDate()*100+h*2+(m?1:0)) < 0.3;
+      html.push(`<button type="button" class="slot" data-t="${t}" aria-pressed="${slot===t}" ${past||busy?"disabled":""}>${t}</button>`);
+    }
+  }
+  $("slots").innerHTML = html.join("");
+}
+$("slots").addEventListener("click", e=>{const b=e.target.closest(".slot"); if(!b||b.disabled) return; slot=b.dataset.t; renderSlots();});
+$("day").addEventListener("change", ()=>{slot=null; renderSlots();});
+function renderSum(){
+  const s = SERVICES.find(x=>x.id===$("svc").value);
+  $("sum").textContent = (s.from?"от ":"") + fmt(s.p[+$("cls").value]);
+}
+$("svc").addEventListener("change", renderSum);
+$("cls").addEventListener("change", renderSum);
+renderSlots(); renderSum();
+
+$("bookForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  const name = $("name").value.trim(), tel = $("tel").value.trim();
+  if(!slot){ $("err").textContent = "Выберите время."; return; }
+  if(!name){ $("err").textContent = "Укажите имя."; $("name").focus(); return; }
+  if(tel.replace(/\D/g,"").length < 10){ $("err").textContent = "Проверьте номер телефона: нужно 10–11 цифр."; $("tel").focus(); return; }
+  $("err").textContent = "";
+  const s = SERVICES.find(x=>x.id===$("svc").value);
+  const day = dayOpts[+$("day").value].label;
+  $("doneText").textContent = `${s.name}, ${CLASSES[+$("cls").value].toLowerCase()} — ${day.toLowerCase()} в ${slot}. Мы перезвоним для подтверждения.`;
+  $("tgText").innerHTML = `🚗 Новая запись<br>${s.name} · ${CLASSES[+$("cls").value]}<br>${day}, ${slot}<br>${name.replace(/</g,"&lt;")}, ${tel.replace(/</g,"&lt;")}`;
+  $("formView").hidden = true; $("doneView").hidden = false;
+});
+$("again").addEventListener("click", ()=>{ slot=null; $("bookForm").reset(); renderSlots(); renderSum(); $("doneView").hidden=true; $("formView").hidden=false; });
+
+// Часы работы
+const order = [1,2,3,4,5,6,0], full = ["Воскресенье","Понедельник","Вторник","Среда","Четверг","Пятница","Суббота"];
+$("hours").innerHTML = order.map(i=>`<tr class="${i===now.getDay()?"today":""}"><td>${full[i]}</td><td>10:00–19:00</td></tr>`).join("");
+</script>
+</body>
+</html>
